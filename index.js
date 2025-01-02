@@ -30,12 +30,10 @@ app.get('/remove-bg', async (req, res) => {
     }
     const imgUrl = req.query.imgUrl;
     try{
-        const blob = await removeBackground(imgUrl,config);
-        //res.setHeaders(headers);
-        res.type(blob.type)
-        blob.arrayBuffer().then((buf) => {
-            res.send(Buffer.from(buf))
-        })
+        removeBackground(imgUrl,config).then( blob => {
+            res.set('Content-Type', 'text/plain');
+            res.send(URL.createObjectURL(blob));
+        });
     } catch (e) {
         res.sendStatus(500)
         res.end()
